@@ -69,12 +69,28 @@ async def first_form_email(message: types.Message, state: FSMContext):
     data = await state.get_data()
     if data['form'] == 1:
         FIRST.append(message.from_user.id)
+        for chat_id in config.ID:
+            await bot.send_message(chat_id=chat_id, text=f'Пользователь выбрал "Хочу ссылку на бесплатный вебинар"\n'
+                                                         f'Имя - {data["name"]}\nПочта - {message.text}\nТелефон - {data["phone"]}')
     elif data['form'] == 2:
         SECOND.append(message.from_user.id)
+        for chat_id in config.ID:
+            await bot.send_message(chat_id=chat_id, text=f'Пользователь выбрал "Хочу записаться на бесплатную консультацию"\n'
+                                                         f'Имя - {data["name"]}\nПочта - {message.text}\nТелефон - {data["phone"]}')
     elif data['form'] == 3:
         THIRD.append(message.from_user.id)
+        for chat_id in config.ID:
+            await bot.send_message(chat_id=chat_id, text=f'Пользователь выбрал "Документы Образцы\n(Кредиторы, Банки, Суды, ФССП и для МФЦ)"\n'
+                                                         f'Ответы на вопросы:\n'
+                                                         f'Документы - {data["doc"]}\n'
+                                                         f'Имя - {data["name"]}\nПочта - {message.text}\nТелефон - {data["phone"]}')
     elif data['form'] == 5:
         FIVE.append(message.from_user.id)
+        for chat_id in config.ID:
+            await bot.send_message(chat_id=chat_id, text=f'Пользователь выбрал "Вопрос по Самостоятельному банкротству"\n'
+                                                         f'Ответы на вопросы:\n'
+                                                         f'Первый вопрос - {data["comp"]}\nВторой вопрос - {data["instructions"]}\nТретий вопрос - {data["last"]}\n'
+                                                         f'Имя - {data["name"]}\nПочта - {message.text}\nТелефон - {data["phone"]}')
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text='Хочу записаться на бесплатную консультацию'))
     keyboard.add(types.KeyboardButton(text='Хочу ссылку на бесплатный вебинар'))
@@ -185,7 +201,7 @@ async def form_four_reg_home(message: types.Message, state: FSMContext):
         keyboard.add(types.KeyboardButton(text=text))
     await message.answer('Зарегистрирован ли на вас транспорт?', reply_markup=keyboard)
     await FormFour.reg_auto.set()
-    await state.update_data(reg_hone=message.text)
+    await state.update_data(reg_home=message.text)
 
 
 @dp.message_handler(state=FormFour.reg_auto)
@@ -254,7 +270,15 @@ async def form_four_family(message: types.Message, state: FSMContext):
 @dp.message_handler(state=FormFour.parents)
 async def form_four_parents(message: types.Message, state: FSMContext):
     global FOUR
+    data = await state.get_data()
     FOUR.append(message.from_user.id)
+    for chat_id in config.ID:
+        await bot.send_message(chat_id=chat_id,
+                               text=f'Пользователь выбрал "Хочу узнать стоимость банкротства"\n'
+                                    f'Ответы на вопросы:\n'
+                                    f'Первый вопрос - {data["situation"]}\nВторой вопрос - {data["price"]}\nТретий вопрос - {data["reg_home"]}\n'
+                                    f'Четвертый вопрос - {data["reg_auto"]}\nПятый вопрос - {data["reg_deposit"]}\nШестой вопрос - {data["transactions"]}\n'
+                                    f'Седьмой вопрос - {data["activity"]}\nВосьмой вопрос - {data["family"]}\nДевятый вопрос - {message.text}')
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text='Хочу записаться на бесплатную консультацию'))
     keyboard.add(types.KeyboardButton(text='Хочу ссылку на бесплатный вебинар'))
