@@ -17,3 +17,13 @@ class FormFour(StatesGroup):
     activity = State()
     family = State()
     parents = State()
+
+
+class FormThird(StatesGroup):
+    comp = State()
+    instructions = State()
+    last = State()
+
+
+class FormFive(StatesGroup):
+    doc = State()
